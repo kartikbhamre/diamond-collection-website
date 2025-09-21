@@ -19,13 +19,11 @@ const products = [
   {id: 10, name: "Men's Winter Jacket", price: 3999, category: "Men's Clothing", image: "jacket1.jpg", rating: 4.7, description: "Warm and stylish winter jacket for cold weather"},
 ];
 
-// Retrieve cart from localStorage or preset with test items
 let cart = JSON.parse(localStorage.getItem("cart")) || [
   {id: 1, name: "Men's Casual Shirt", price: 1299, quantity: 2},
   {id: 4, name: "Women's Designer Top", price: 999, quantity: 1},
 ];
 
-// Helpers to save and render cart count
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   document.getElementById("cart-count").textContent = totalItemsInCart();
@@ -34,7 +32,6 @@ function totalItemsInCart(){
   return cart.reduce((sum, item) => sum + item.quantity, 0);
 }
 
-// Navigation and sections
 function showSection(sectionId) {
   document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
   const section = document.getElementById(sectionId);
@@ -49,7 +46,6 @@ function showSection(sectionId) {
 }
 showSection("home");
 
-// Search products
 function searchProducts() {
   const query = document.getElementById("searchInput").value.toLowerCase();
   let category = document.getElementById("searchCategory").value;
@@ -62,7 +58,6 @@ function searchProducts() {
   renderProducts(filtered);
 }
 
-// Filter products by category select in products section
 function filterProducts() {
   let category = document.getElementById("filterCategory").value;
   if(category === "") {
@@ -73,14 +68,12 @@ function filterProducts() {
   }
 }
 
-// Render category from home page shortcut
 function showCategory(categoryName) {
   showSection("products");
   document.getElementById("filterCategory").value = categoryName;
   filterProducts();
 }
 
-// Render the list of products
 function renderProducts(productsList) {
   const container = document.getElementById("productsList");
   container.innerHTML = "";
@@ -97,7 +90,6 @@ function renderProducts(productsList) {
   });
 }
 
-// Add to cart
 function addToCart(productId) {
   const p = products.find(prod => prod.id === productId);
   if(!p) return;
@@ -111,7 +103,6 @@ function addToCart(productId) {
   alert(`Added to cart: ${p.name}`);
 }
 
-// Render cart items
 function renderCart() {
   const container = document.getElementById("cartItems");
   container.innerHTML = "";
@@ -141,7 +132,6 @@ function renderCart() {
     `;
     container.appendChild(div);
   });
-  // Summary
   const summary = document.getElementById("cartSummary");
   summary.innerHTML = `
     <div>Total Items: ${totalItemsInCart()}</div>
@@ -151,7 +141,6 @@ function renderCart() {
   saveCart();
 }
 
-// Quantity controls
 function increaseQty(id) {
   const idx = cart.findIndex(i => i.id === id);
   if(idx !== -1){
@@ -169,7 +158,6 @@ function decreaseQty(id) {
   }
 }
 
-// Undo delete feature
 let lastRemovedItem = null;
 function removeFromCart(id) {
   const idx = cart.findIndex(item => item.id === id);
@@ -202,29 +190,49 @@ function undoRemove() {
   }
 }
 
-// Checkout process simulation
-function processCheckout(e){
+function calculateTotalAmount() {
+  return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+}
+
+function processCheckout(e) {
   e.preventDefault();
-  if(cart.length === 0){
+  if (cart.length === 0) {
     alert("Your cart is empty.");
     showSection("cart");
     return;
   }
-  alert("Order placed! Thank you for shopping with us.");
-  cart = [];
-  saveCart();
-  renderCart();
-  showSection("home");
+  const options = {
+    key: "YOUR_RAZORPAY_KEY_ID", // Replace with your Razorpay Key ID
+    amount: calculateTotalAmount() * 100, // amount in paise
+    currency: "INR",
+    name: "Diamond Collection and Bags",
+    description: "Purchase at Diamond Collection",
+    handler: function (response) {
+      alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+      cart = [];
+      saveCart();
+      renderCart();
+      showSection("home");
+    },
+    prefill: {
+      name: document.getElementById("checkoutName").value,
+      email: document.getElementById("contactEmail") ? document.getElementById("contactEmail").value : "",
+      contact: document.getElementById("checkoutPhone").value,
+    },
+    theme: {
+      color: "#0d47a1",
+    },
+  };
+  const rzp = new Razorpay(options);
+  rzp.open();
 }
 
-// Contact form simulation
 function submitContactForm(e){
   e.preventDefault();
   alert("Thank you for contacting us. We will get back to you shortly.");
   document.getElementById("contactForm").reset();
 }
 
-// Admin cart editor toggle and logic
 function toggleAdminCartEditor() {
   const editor = document.getElementById("adminCartEditor");
   editor.style.display = (editor.style.display === "none" || editor.style.display === "") ? "block" : "none";
