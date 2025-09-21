@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Diamond Collection and Bags – Complete Family Showroom</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <h1>Diamond Collection & Bags</h1>
+      <span class="tagline">Complete Family Showroom</span>
+    </div>
+    <div class="search-container">
+      <select class="category-select" id="searchCategory">
+        <option value="">All Categories</option>
+        <option value="Men's Clothing">Men's Clothing</option>
+        <option value="Women's Clothing">Women's Clothing</option>
+        <option value="Children's Clothing">Children's Clothing</option>
+        <option value="Bags">Bags</option>
+      </select>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search products..." />
+      <button class="search-btn" onclick="searchProducts()">🔍</button>
+    </div>
+    <div class="header-actions">
+      <button class="nav-btn" onclick="showSection('home')">Home</button>
+      <button class="nav-btn" onclick="showSection('about')">About</button>
+      <button class="nav-btn" onclick="showSection('contact')">Contact</button>
+      <button class="nav-btn" onclick="showSection('products')">Products</button>
+      <button class="cart-btn" onclick="showSection('cart')">
+        🛒 Cart (<span id="cart-count">0</span>)
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Home Section -->
+  <section id="home" class="section active">
+    <div class="hero-banner">
+      <div class="hero-content">
+        <h2>Diamond Collection and Bags – Complete Family Showroom</h2>
+        <p>We offer a wide range of fashionable clothing and bags for all family members.</p>
+      </div>
+      <!-- Add a placeholder for banner image -->
+      <div class="hero-image" style="background-image:url('banner.jpg');"></div>
+    </div>
+    <h3>Featured Categories</h3>
+    <div class="category-cards">
+      <div class="category-card" onclick="showCategory('Men\'s Clothing')">Men's Clothing</div>
+      <div class="category-card" onclick="showCategory('Women\'s Clothing')">Women's Clothing</div>
+      <div class="category-card" onclick="showCategory('Children\'s Clothing')">Children's Clothing</div>
+      <div class="category-card" onclick="showCategory('Bags')">Bags</div>
+    </div>
+  </section>
+
+  <!-- About Us -->
+  <section id="about" class="section">
+    <h2>About Us</h2>
+    <p>Diamond Collection and Bags is a family showroom with a rich history of serving stylish and quality clothing and bags for all ages. We are committed to providing excellent customer service and fashionable products.</p>
+    <div class="about-images">
+      <img src="showroom1.jpg" alt="Showroom view" />
+      <img src="staff1.jpg" alt="Our staff" />
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products" class="section">
+    <h2>Products</h2>
+    <div class="filters">
+      <label>
+        Filter by Category:
+        <select id="filterCategory" onchange="filterProducts()">
+          <option value="">All</option>
+          <option value="Men's Clothing">Men's Clothing</option>
+          <option value="Women's Clothing">Women's Clothing</option>
+          <option value="Children's Clothing">Children's Clothing</option>
+          <option value="Bags">Bags</option>
+        </select>
+      </label>
+    </div>
+    <div id="productsList" class="product-grid"></div>
+  </section>
+
+  <!-- Cart Section -->
+  <section id="cart" class="section">
+    <h2>Your Shopping Cart</h2>
+    <div id="cartItems"></div>
+    <div class="cart-summary" id="cartSummary"></div>
+    <div class="cart-footer">
+      <button class="checkout-btn" onclick="showSection('checkout')">Proceed to Checkout</button>
+    </div>
+  </section>
+
+  <!-- Checkout Section -->
+  <section id="checkout" class="section">
+    <h2>Checkout</h2>
+    <form id="checkoutForm" onsubmit="processCheckout(event)">
+      <label>
+        Full Name:<br />
+        <input type="text" id="checkoutName" required />
+      </label>
+      <label>
+        Address:<br />
+        <textarea id="checkoutAddress" required></textarea>
+      </label>
+      <label>
+        Phone:<br />
+        <input type="tel" id="checkoutPhone" required />
+      </label>
+      <label>
+        Payment Method:<br />
+        <select id="paymentMethod" required>
+          <option value="card">Credit/Debit Card</option>
+          <option value="googlepay">Google Pay</option>
+        </select>
+      </label>
+      <button type="submit" class="checkout-btn">Place Order</button>
+    </form>
+  </section>
+
+  <!-- Contact Us -->
+  <section id="contact" class="section">
+    <h2>Contact Us</h2>
+    <p><strong>Address:</strong> 05, Opposite Karmaveer Bhausaheb Hire College, Beside Ganpati Mandir, Pawan Nagar, Cidco, Nashik, Maharashtra 422008</p>
+    <p><strong>Phone:</strong> 9552090211</p>
+    <p><strong>Email:</strong> info@diamondcollection.com</p>
+    <div id="map" style="width:100%; height:300px; background:#eee;">[Google Map Placeholder]</div>
+    <form id="contactForm" onsubmit="submitContactForm(event)">
+      <input type="text" id="contactName" placeholder="Name" required />
+      <input type="email" id="contactEmail" placeholder="Email" required />
+      <textarea id="contactMessage" placeholder="Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <!-- Admin Cart Editor (hidden by default) -->
+  <section id="adminCartEditor" class="section" style="display:none;">
+    <h2>Admin Cart Editor</h2>
+    <input type="number" id="adminProductId" placeholder="Product ID" min="1" />
+    <input type="number" id="adminQuantity" placeholder="Quantity" min="0" />
+    <button onclick="adminAddToCart()">Add/Update Item</button>
+    <button onclick="adminClearCart()">Clear Cart</button>
+    <button onclick="toggleAdminCartEditor()">Close Editor</button>
+  </section>
+
+</main>
+
+<footer>
+  <p>Diamond Collection and Bags – Complete Family Showroom</p>
+  <p>Contact: 9552090211 | info@diamondcollection.com</p>
+  <p>
+    <a href="https://facebook.com" target="_blank">Facebook</a> | <a href="https://instagram.com" target="_blank">Instagram</a> | <a href="https://twitter.com" target="_blank">Twitter</a>
+  </p>
+  <p><a href="#">Terms & Conditions</a></p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
