@@ -1,9 +1,11 @@
-/* Base colors and reset */
+//* Base colors and reset */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  background: #fefefe;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 45%, #fbc2eb 100%);
   color: #333;
+  transition: background 0.5s;
 }
 a {
   color: #0d47a1;
